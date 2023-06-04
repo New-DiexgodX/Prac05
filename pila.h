@@ -10,64 +10,162 @@ struct nodo_char_pila
 	}
 };
 
-class pila_int_array //pila de enteros implementada en un arreglo
+class pila_int_array 
 {
     public:
-        int *stack; //arreglo donde se almacenaran los elementos
-        int top; //indice de el ultimo elemento ingresado
-        int max; //tamanho del arreglo stack
+        int *stack;
+        int top; 
+        int max; 
 
-        pila_int_array(int m) //constructor
+        pila_int_array(int m) 
         {
-            this->stack=new int[m]; //arreglo dinamico tamanho m
-            this->max=m; //guardamos el maximo (usar en overflow)
-            this->top=-1; //sin elementos (usar en underflow)
+            this->stack=new int[m]; 
+            this->max=m; 
+            this->top=-1; 
         }
  
-        bool empty(); //1 si vacio, O/W 0
-		bool full(); //1 si lleno, O/W 0
-		void push(int k); //a?ade k a la pila, verifica overflow con full()
-        int pop(); //remueve un elemento de la pila, verifica underflow con empty()
+        bool empty(); 
+		bool full(); 
+		void push(int k);
+        int pop(); 
         
 };
 
-class dos_pilas_int_array //dos pilas de enteros implementada en UN SOLO arreglo
+bool pila_int_array::empty()
+{
+	return (top == -1) ? 1 : 0;
+}
+
+bool pila_int_array::full()
+{
+	return (top == max-1) ? 1 : 0;		
+}
+
+void pila_int_array::push(int k)
+{
+	if(!this->full())
+	{
+		top++;
+		this->stack[top] = k; 
+	}
+}
+
+int pila_int_array::pop()
+{
+	if(!this->empty())
+	{
+		top--;
+		return stack[top+1];
+	}
+	
+}
+
+class dos_pilas_int_array 
 {
 	public:
-        int *stack; //arreglo donde se almacenaran los elementos de AMBAS pilas
-        int top1; //indice de el ultimo elemento ingresado en la PILA1
-        int top2; //indice de el ultimo elemento ingresado en la PILA2
-        int max; //tamanho del arreglo stack
+        int *stack; 
+        int top1; 
+        int top2; 
+        int max; 
 
-        dos_pilas_int_array(int m) //constructor
+        dos_pilas_int_array(int m) 
         {
-            this->stack=new int[m]; //arreglo dinamico tamanho m
-            this->max=m; //guardamos el maximo
-            this->top1=-1; //sin elementos en PILA1
-            this->top2=max; //sin elementos en PILA2
+            this->stack=new int[m]; 
+            this->max=m; 
+            this->top1=-1; 
+            this->top2=max; 
         }
  
-        bool empty1(); //1 si vacio PILA1, O/W 0
-        bool empty2(); //1 si vacio PILA2, O/W 0
-		bool full1(); //1 si lleno PILA1, O/W 0,
-		bool full2(); //1 si lleno PILA2, O/W 0, 
-		void push1(int k); //a?ade k a la PILA1, verifica overflow con full1()
-		void push2(int k); //a?ade k a la PILA2, verifica overflow con full2()
-        int pop1(); //remueve un elemento de la PILA1, verifica underflow con empty1()
-		int pop2(); //remueve un elemento de la PILA2, verifica underflow con empty2()
+        bool empty1(); 
+        bool empty2(); 
+		bool full1(); 
+		bool full2(); 
+		void push1(int k); 
+		void push2(int k);
+        int pop1(); 
+		int pop2(); 
 };
+bool dos_pilas_int_array::empty1()
+{
+	return (top1 == -1) ? 1 : 0;
+}
+bool dos_pilas_int_array::empty2()
+{
+	return (top2 == max) ? 1 : 0;
+}
+bool dos_pilas_int_array::full1()
+{
+	return (top1 == top2-1) ? 1 : 0;
+}
+bool dos_pilas_int_array::full2()
+{
+	return (top2 == top1+1) ? 1 : 0;
+}
+void dos_pilas_int_array::push1(int k)
+{
+	if(!this->full1())
+	{
+		top1++;
+		stack[top1] = k;
+	}
+}
+void dos_pilas_int_array::push2(int k)
+{
+	if(!this->full2())
+	{
+		top2--;
+		stack[top2] = k;
+	}
+}
+int dos_pilas_int_array::pop1()
+{
+	if(!this->empty1())
+	{
+		top1--;
+		return stack[top1+1];
+	}
+}
+int dos_pilas_int_array::pop2()
+{
+	if(!this->empty2())
+	{
+		top2++;
+		return stack[top2-1];
+	}
+}
 
-class pila_char_list //pila de caracteres implementada en una lista
+class pila_char_list 
 {
     public:
-        nodo_char_pila *top; //puntero al ultimo nodo de la lista
+        nodo_char_pila *top; 
 
-        pila_char_list() //constructor
+        pila_char_list()
         {
-            this->top=nullptr; //nullptr = NULL en C++11
+            this->top=nullptr; 
         }
  
-        bool empty(); //1 si vacio, O/W 0
-		void push(char k); //a?ade k a la pila
-        char pop(); //remueve un elemento de la pila, verifica underflow con empty()
+        bool empty(); 
+		void push(char k); 
+        char pop(); 
 };
+bool pila_char_list::empty()
+{
+	return (top == nullptr) ? 1 : 0;
+}
+void pila_char_list::push(char k)
+{
+	nodo_char_pila *x = new nodo_char_pila(k);
+	x->prev = top;
+	top = x;
+}
+char pila_char_list::pop()
+{
+	if(!this->empty())
+	{
+		nodo_char_pila *x = top;
+		char p = top->key;
+		top = top->prev;
+		delete x;
+		return p;
+	}
+}
